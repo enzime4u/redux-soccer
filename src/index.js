@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
@@ -20,14 +19,12 @@ const reducer = (state = initialState, action) => {
   switch (action.type) {
     case 'ADD_TEAM': {
       state.teams = [...state.teams, action.payload];
-      console.log('from add_team', state);
       return { ...state };
     }
     case 'REMOVE_TEAM': {
       state.teams = [
         ...state.teams.filter((team) => team.id !== action.payload.id),
       ];
-      console.log('From Remove Team:', action.id);
       return { ...state };
     }
     case 'MAKE_MATCH': {

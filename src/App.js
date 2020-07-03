@@ -1,35 +1,33 @@
 import React, { useState } from 'react';
 import './App.css';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import cuid from 'cuid';
 
-function mapStateToProps(state) {
-  return {
-    teams: state.teams,
-    matches: state.matches,
-  };
-}
-
 function App(props) {
+  const teams = useSelector((state) => state.teams);
+  const matches = useSelector((state) => state.matches);
+  const dispatch = useDispatch();
   const [teamName, setTeamName] = useState('');
   const [teamOne, setTeamOne] = useState('');
   const [teamTwo, setTeamTwo] = useState('');
   const [score, setScore] = useState('');
 
   const addTeam = () => {
-    props.dispatch({
-      type: 'ADD_TEAM',
-      payload: { name: teamName, id: cuid() },
-    });
+    if (teamName) {
+      dispatch({
+        type: 'ADD_TEAM',
+        payload: { name: teamName, id: cuid() },
+      });
+    }
     setTeamName('');
   };
 
   const removeTeam = (id) => {
-    props.dispatch({ type: 'REMOVE_TEAM', payload: { id: id } });
+    dispatch({ type: 'REMOVE_TEAM', payload: { id: id } });
   };
 
   const makeMatch = () => {
-    props.dispatch({
+    dispatch({
       type: 'MAKE_MATCH',
       payload: { teamOne, teamTwo, score },
     });
@@ -43,14 +41,17 @@ function App(props) {
       <input
         type='text'
         value={teamName}
-        onChange={(e) => setTeamName(e.target.value)}
+        onChange={(e) => {
+          e.preventDefault();
+          setTeamName(e.target.value);
+        }}
       />
       <button onClick={addTeam}>Add Team</button>
       <ul>
-        {props.teams.map((team) => (
+        {teams.map((team) => (
           <li key={team.id}>
             {team.name}
-            <button onClick={() => removeTeam(team.id)}>Remove</button>
+            <button onClick={() => removeTeam(team.id)}>X</button>
           </li>
         ))}
       </ul>
@@ -61,7 +62,7 @@ function App(props) {
           onChange={(event) => setTeamOne(event.target.value)}
         >
           <option>Select Team 1</option>
-          {props.teams.map((team) => (
+          {teams.map((team) => (
             <option key={team.id} value={team.name}>
               {team.name}
             </option>
@@ -72,7 +73,7 @@ function App(props) {
           onChange={(event) => setTeamTwo(event.target.value)}
         >
           <option>Select Team 2</option>
-          {props.teams.map((team) => (
+          {teams.map((team) => (
             <option key={team.id} value={team.name}>
               {team.name}
             </option>
@@ -87,7 +88,7 @@ function App(props) {
       </div>
       <div>
         <ul>
-          {props.matches.map((match, index) => (
+          {matches.map((match, index) => (
             <li key={index}>
               {match.teamOne}-{match.teamTwo} {match.score}
             </li>
@@ -98,4 +99,4 @@ function App(props) {
   );
 }
 
-export default connect(mapStateToProps)(App);
+export default App;
