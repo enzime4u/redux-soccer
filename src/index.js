@@ -5,38 +5,9 @@ import * as serviceWorker from './serviceWorker';
 
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
+import appReducer from './reducers/index';
 
-const initialState = {
-  teams: [
-    { id: 123, name: 'Steaua Bucuresti' },
-    { id: 1234, name: 'Dinamo' },
-    { id: 12345, name: 'Farul Constanta' },
-  ],
-  matches: [],
-};
-
-const reducer = (state = initialState, action) => {
-  switch (action.type) {
-    case 'ADD_TEAM': {
-      state.teams = [...state.teams, action.payload];
-      return { ...state };
-    }
-    case 'REMOVE_TEAM': {
-      state.teams = [
-        ...state.teams.filter((team) => team.id !== action.payload.id),
-      ];
-      return { ...state };
-    }
-    case 'MAKE_MATCH': {
-      state.matches = [...state.matches, action.payload];
-      return { ...state };
-    }
-    default:
-      return state;
-  }
-};
-
-const store = createStore(reducer);
+const store = createStore(appReducer);
 
 ReactDOM.render(
   <Provider store={store}>
