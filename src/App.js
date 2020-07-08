@@ -3,9 +3,11 @@ import './App.css';
 import { useSelector, useDispatch } from 'react-redux';
 import cuid from 'cuid';
 
-function App(props) {
-  const teams = useSelector((state) => state.teams);
-  const matches = useSelector((state) => state.matches);
+import { selectAllTeams, selectMatches } from './selectors';
+
+function App() {
+  const teams = useSelector(selectAllTeams);
+  const matches = useSelector(selectMatches);
   const dispatch = useDispatch();
   const [teamName, setTeamName] = useState('');
   const [teamOne, setTeamOne] = useState('');
@@ -27,10 +29,12 @@ function App(props) {
   };
 
   const makeMatch = () => {
-    dispatch({
-      type: 'MAKE_MATCH',
-      payload: { teamOne, teamTwo, score },
-    });
+    if (teamOne && teamTwo && score) {
+      dispatch({
+        type: 'MAKE_MATCH',
+        payload: { teamOne, teamTwo, score },
+      });
+    }
     setTeamOne('');
     setTeamTwo('');
     setScore('');
