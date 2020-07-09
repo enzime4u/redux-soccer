@@ -20,8 +20,8 @@ function App() {
         type: 'ADD_TEAM',
         payload: { name: teamName, id: cuid() },
       });
+      setTeamName('');
     }
-    setTeamName('');
   };
 
   const removeTeam = (id) => {
@@ -34,10 +34,10 @@ function App() {
         type: 'MAKE_MATCH',
         payload: { teamOne, teamTwo, score },
       });
+      setTeamOne('');
+      setTeamTwo('');
+      setScore('');
     }
-    setTeamOne('');
-    setTeamTwo('');
-    setScore('');
   };
 
   return (
